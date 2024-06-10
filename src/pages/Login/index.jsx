@@ -32,7 +32,7 @@ export default function Login() {
       console.log(message)
     }
 
-  }, [login, senha])
+  }, [login, senha, navegate])
 
   return (
     <div>
