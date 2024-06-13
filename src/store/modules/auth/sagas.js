@@ -1,5 +1,4 @@
 import { call, put, all, takeLatest } from 'redux-saga/effects';
-import { toast } from 'react-toastify';
 
 import { get } from 'lodash';
 import * as actions from './actions';
@@ -9,23 +8,29 @@ import history from '../../../services/history';
 
 function* loginRequest({ payload }) {
   try {
-    const response = yield call(axios.post, '/tokens', payload);
+    const response = yield call(axios.post, '/login', payload);
     yield put(actions.loginSuccess({ ...response.data }));
 
-    toast.success('voce fez login', {
-      onClose: () => {
-        axios.defaults.headers.Authorization = `Bearer ${response.data.token}`;
+    axios.defaults.headers.Authorization = `Bearer ${response.data.token}`;
 
-        console.log(payload.prevState);
+    history.push(payload.prevState);
+    history.go(0);
 
-        history.push(payload.prevState);
-        history.go(0);
-      },
-    });
   } catch (error) {
+    console.log('erro login request');
     console.log(error);
-    toast.error('usuario ou senha invalidos');
+    yield put(actions.loginFailure());
+  }
+}
 
+function* logout() {
+  try {
+    yield put(actions.logoutSucess())
+    axios.defaults.headers.Authorization = ''
+    history.push('/login');
+    history.go(0);
+  } catch (error) {
+    console.log('erro logout', error)
     yield put(actions.loginFailure());
   }
 }
@@ -39,4 +44,5 @@ function persistRehydrate({ payload }) {
 export default all([
   takeLatest(types.LOGIN_REQUEST, loginRequest),
   takeLatest(types.PERSISTE_REHYDRATE, persistRehydrate),
+  takeLatest(types.LOGOUT, logout)
 ]);

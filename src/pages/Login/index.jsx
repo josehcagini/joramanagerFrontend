@@ -1,29 +1,25 @@
 import React, { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from '../../services/axios';
 import { AxiosError } from 'axios';
+import { useDispatch } from 'react-redux';
 
-export default function Login() {
+import { get } from 'lodash';
+import * as actions from '../../store/modules/auth/actions';
+
+export default function Login(props) {
 
   const [login, setLogin] = useState('');
   const [senha, setSenha] = useState('');
   const [error, setError] = useState('');
-  const navegate = useNavigate();
+  const dispatch = useDispatch();
+  const prevPath = get(props, 'location.state.prevPath', '/');
+
 
   const handleSubmit = useCallback( async (e) => {
     e.preventDefault();
     setError('');
     try {
-      const response = await axios.post('/login', {
-        nome: login,
-        senha,
-      })
 
-      const token = response.data.token
-
-      localStorage.setItem('token', token)
-
-      navegate('/')
+      dispatch(actions.loginRequest({nome: login, senha, prevPath}))
 
     } catch (error) {
       let message;
@@ -32,7 +28,7 @@ export default function Login() {
       console.log(message)
     }
 
-  }, [login, senha, navegate])
+  }, [login, senha, dispatch, prevPath])
 
   return (
     <div>
@@ -43,6 +39,7 @@ export default function Login() {
             <label htmlFor='login'>Login</label>
             <input
               id='login'
+              autoComplete='username'
               type='text'
               value={login}
               onChange={(e) => setLogin(e.target.value)}
@@ -54,6 +51,7 @@ export default function Login() {
           <input
             type="password"
             id="senha"
+            autoComplete='current-password'
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
             required

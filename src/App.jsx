@@ -1,15 +1,22 @@
-import './App.css'
 import { BrowserRouter as Router } from "react-router-dom";
 
-import Header from './components/Header'
-import Routes from './routes'
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/lib/integration/react';
+
+import store, { persistor } from './store';
+import history from './services/history';
+
+import MyLayout from './components/MyLayout';
 
 function App() {
   return (
-    <Router>
-      <Header />
-      <Routes />
-    </Router>
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <Router history={history}>
+          <MyLayout />
+        </Router>
+      </PersistGate>
+    </Provider>
   )
 }
 
