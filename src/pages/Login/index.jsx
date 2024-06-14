@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from 'react';
-import { AxiosError } from 'axios';
 import { useDispatch } from 'react-redux';
 
 import { get } from 'lodash';
 import * as actions from '../../store/modules/auth/actions';
+import getErrorMessage from '../../utils/getErrorMessage';
 
 export default function Login(props) {
 
@@ -23,12 +23,12 @@ export default function Login(props) {
 
     } catch (error) {
       let message;
-      message = error instanceof AxiosError ? error.response.data.error.message : error.message
+      message = getErrorMessage(error)
       setError( message || 'Falha ao logar')
       console.log(message)
     }
 
-  }, [login, senha, dispatch, prevPath])
+  }, [setError, login, senha, dispatch, prevPath])
 
   return (
     <div>
