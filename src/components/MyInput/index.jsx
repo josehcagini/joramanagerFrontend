@@ -3,7 +3,7 @@ import {Input, Label} from './styled';
 
 import PropTypes from 'prop-types';
 
-export default function MyInput({labelName, type, name, id, placeholder, value, onChange, autoComplete='off'}) {
+export default function MyInput({labelName, type, name, id, placeholder, value, onChange, autoComplete='off', required = false}) {
 
   return (
     <div>
@@ -24,6 +24,7 @@ export default function MyInput({labelName, type, name, id, placeholder, value, 
         value={value}
         onChange={onChange}
         autoComplete={autoComplete}
+        required={required}
       />
     </div>
   );
@@ -38,4 +39,5 @@ MyInput.propTypes = {
   value: PropTypes.any,
   onChange: PropTypes.func,
   autoComplete: PropTypes.string,
+  required: PropTypes.bool,
 };

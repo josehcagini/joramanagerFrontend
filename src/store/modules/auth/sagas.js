@@ -17,8 +17,7 @@ function* loginRequest({ payload }) {
     history.go(0);
 
   } catch (error) {
-    console.log('erro login request');
-    console.log(error);
+    console.log('erro login request', error);
     yield put(actions.loginFailure());
   }
 }

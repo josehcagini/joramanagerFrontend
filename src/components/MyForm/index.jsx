@@ -1,12 +1,18 @@
 import React from 'react';
 
-import Form from './styled';
+import {Form} from './styled';
+import PropTypes from 'prop-types';
 
-export default function MyForm() {
+export default function MyForm({children, onSubmit}) {
 
   return (
-    <Form>
-
+    <Form onSubmit={onSubmit}>
+      {children}
     </Form>
   );
 }
+
+MyForm.propTypes = {
+  children: PropTypes.node,
+  onSubmit: PropTypes.func
+};

@@ -4,6 +4,10 @@ import axios from '../../services/axios';
 import history from '../../services/history';
 
 import MyInput from '../../components/MyInput';
+import MyForm from '../../components/MyForm';
+
+
+import {Container} from './styled'
 
 export default function UsuarioCreate() {
 
@@ -55,13 +59,13 @@ export default function UsuarioCreate() {
   }, [nome, senha, grupoId])
 
   return (
-    <div>
-      <h1>Usuario</h1>
+    <Container>
+      <h1 style={{margin: `8px`}}>Usuario</h1>
       {
         error &&
         <p>{error}</p>
       }
-      <form onSubmit={handleSubmit}>
+      <MyForm onSubmit={handleSubmit}>
         <MyInput
           labelName="Nome"
           type="text"
@@ -91,8 +95,8 @@ export default function UsuarioCreate() {
           onChange={(e) => setGrupo(e.target.value)}
         />
         <button type="submit">Salvar</button>
-      </form>
+      </MyForm>
 
-    </div>
+    </Container>
   );
 }

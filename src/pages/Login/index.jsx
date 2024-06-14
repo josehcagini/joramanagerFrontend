@@ -4,6 +4,8 @@ import { useDispatch } from 'react-redux';
 import { get } from 'lodash';
 import * as actions from '../../store/modules/auth/actions';
 import getErrorMessage from '../../utils/getErrorMessage';
+import MyForm from '../../components/MyForm';
+import MyInput from '../../components/MyInput';
 
 export default function Login(props) {
 
@@ -25,7 +27,7 @@ export default function Login(props) {
       let message;
       message = getErrorMessage(error)
       setError( message || 'Falha ao logar')
-      console.log(message)
+      console.log('login handlesubmit', message)
     }
 
   }, [setError, login, senha, dispatch, prevPath])
@@ -34,31 +36,27 @@ export default function Login(props) {
     <div>
       <h2>Login</h2>
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div>
-            <label htmlFor='login'>Login</label>
-            <input
-              id='login'
-              autoComplete='username'
-              type='text'
-              value={login}
-              onChange={(e) => setLogin(e.target.value)}
-              required
-            />
-        </div>
-        <div>
-          <label htmlFor="senha">Senha</label>
-          <input
-            type="password"
-            id="senha"
-            autoComplete='current-password'
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-            required
-          />
-        </div>
+      <MyForm onSubmit={handleSubmit}>
+        <MyInput
+          labelName={'Login'}
+          id='login'
+          autoComplete='username'
+          type='text'
+          value={login}
+          onChange={(e) => setLogin(e.target.value)}
+          required
+        />
+        <MyInput
+          labelName={'Senha'}
+          type="password"
+          id="senha"
+          autoComplete='current-password'
+          value={senha}
+          onChange={(e) => setSenha(e.target.value)}
+          required
+        />
         <button type="submit">Login</button>
-      </form>
+      </MyForm>
     </div>
   );
 }

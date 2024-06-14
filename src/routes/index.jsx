@@ -8,6 +8,7 @@ import Home from '../pages/Home';
 import Page404 from '../pages/Page404';
 import Logout from '../pages/Logout';
 import UsuarioCreate from '../pages/UsuarioCreate';
+import UsuarioList from '../pages/UsuarioList';
 
 
 export default function Routers() {
@@ -27,6 +28,7 @@ export default function Routers() {
 
       <Route path='/usuario' element={<MyRoute isClosed />}>
         <Route path='/usuario/registrar' element={<UsuarioCreate />} />
+        <Route path='/usuario/listar' element={<UsuarioList />} />
       </Route>
 
       <Route path="*" element={<MyRoute />}>

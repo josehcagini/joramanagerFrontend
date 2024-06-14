@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { FaHome, FaSignInAlt, FaUserAlt, FaSignOutAlt } from 'react-icons/fa';
 import { Nav } from './styled';
@@ -11,11 +11,11 @@ import getErrorMessage from '../../utils/getErrorMessage';
 export default function Header({authState}) {
 
   const [acessos, setAcessos] = useState([])
+  const location = useLocation();
 
   useEffect(() => {
 
     async function getAcessos(){
-      console.log(authState)
       try {
         const response = await axios.get(`/grupo/${authState.usuario.grupoId}/acessos`)
 
@@ -23,13 +23,13 @@ export default function Header({authState}) {
 
       } catch (error) {
         const message = getErrorMessage(error)
-        console.log(message)
+        console.log( 'getacesso',message)
       }
     }
 
-    getAcessos()
+    if (location.pathname !== '/login') getAcessos()
 
-  }, [setAcessos, authState])
+  }, [setAcessos, authState, location])
 
   return (
     <Nav>
