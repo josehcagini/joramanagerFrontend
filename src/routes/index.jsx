@@ -10,6 +10,9 @@ import Logout from '../pages/Logout';
 import UsuarioCreate from '../pages/UsuarioCreate';
 import UsuarioList from '../pages/UsuarioList';
 import UsuarioEdit from '../pages/UsuarioEdit';
+import AtividadeCreate from '../pages/Atividade/Registrar';
+import AtividadeList from '../pages/Atividade/Listar';
+import AtividadeEdit from '../pages/Atividade/Editar';
 import PropTypes from 'prop-types';
 
 
@@ -32,6 +35,12 @@ export default function Routers({acessos}) {
         <Route path='/usuario/registrar' element={<UsuarioCreate />} />
         <Route path='/usuario/listar' element={<UsuarioList />} />
         <Route path='/usuario/:usuarioId/editar' element={<UsuarioEdit />} />
+      </Route>
+
+      <Route path='/atividade' element={<MyRoute acessos={acessos} isClosed={true} />}>
+        {/* <Route path='/atividade/registrar' element={<AtividadeCreate />} /> */}
+        <Route path='/atividade/listar' element={<AtividadeList />} />
+        {/* <Route path='/atividade/:atividadeId/editar' element={<AtividadeEdit />} /> */}
       </Route>
 
       <Route path="*" element={<MyRoute />}>
