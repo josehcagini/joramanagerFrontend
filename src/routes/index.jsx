@@ -9,26 +9,29 @@ import Page404 from '../pages/Page404';
 import Logout from '../pages/Logout';
 import UsuarioCreate from '../pages/UsuarioCreate';
 import UsuarioList from '../pages/UsuarioList';
+import UsuarioEdit from '../pages/UsuarioEdit';
+import PropTypes from 'prop-types';
 
 
-export default function Routers() {
+export default function Routers({acessos}) {
   return (
     <Routes>
-      <Route path="/login" element={<MyRoute />}>
+      <Route path="/login" element={<MyRoute acessos={acessos} isClosed={false} />}>
         <Route index element={<Login />} />
       </Route>
 
-      <Route path="/logout" element={<MyRoute isClosed />}>
+      <Route path="/logout" element={<MyRoute acessos={acessos} isClosed={true} />}>
         <Route index element={<Logout />} />
       </Route>
 
-      <Route path='/' element={<MyRoute isClosed />}>
+      <Route path='/' element={<MyRoute acessos={acessos} isClosed={true} />}>
         <Route index element={<Home />} />
       </Route>
 
-      <Route path='/usuario' element={<MyRoute isClosed />}>
+      <Route path='/usuario' element={<MyRoute acessos={acessos} isClosed={true} />}>
         <Route path='/usuario/registrar' element={<UsuarioCreate />} />
         <Route path='/usuario/listar' element={<UsuarioList />} />
+        <Route path='/usuario/:usuarioId/editar' element={<UsuarioEdit />} />
       </Route>
 
       <Route path="*" element={<MyRoute />}>
@@ -37,3 +40,7 @@ export default function Routers() {
     </Routes>
   );
 }
+
+Routers.propTypes = {
+  acessos: PropTypes.array,
+};

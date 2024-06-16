@@ -5,18 +5,23 @@ import * as actions from './actions';
 import * as types from '../types';
 import axios from '../../../services/axios';
 import history from '../../../services/history';
+import getErrorMessage from '../../../utils/getErrorMessage';
 
 function* loginRequest({ payload }) {
   try {
-    const response = yield call(axios.post, '/login', payload);
+    const response = yield call(axios.post, '/login', { nome: payload.nome, senha: payload.senha });
     yield put(actions.loginSuccess({ ...response.data }));
 
     axios.defaults.headers.Authorization = `Bearer ${response.data.token}`;
 
-    history.push(payload.prevState);
-    history.go(0);
+    console.log('teste')
+
+    //history.push('/');
+    //history.go(0);
 
   } catch (error) {
+    const message = getErrorMessage(error)
+    payload.setError(message)
     console.log('erro login request', error);
     yield put(actions.loginFailure());
   }

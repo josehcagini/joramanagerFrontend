@@ -21,7 +21,7 @@ export default function Login(props) {
     setError('');
     try {
 
-      dispatch(actions.loginRequest({nome: login, senha, prevPath}))
+      dispatch(actions.loginRequest({nome: login, senha, prevPath, setError}))
 
     } catch (error) {
       let message;

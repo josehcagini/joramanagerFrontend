@@ -1,45 +1,44 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-import { FaHome, FaSignInAlt, FaUserAlt, FaSignOutAlt } from 'react-icons/fa';
+import { FaHome, FaSignInAlt, FaUserAlt, FaSignOutAlt, FaRegUserCircle } from 'react-icons/fa';
 import { Nav } from './styled';
 
 import PropTypes from 'prop-types';
-import axios from '../../services/axios';
-import getErrorMessage from '../../utils/getErrorMessage';
+import Acessos from '../../services/acessos';
+import { useSelector } from 'react-redux';
 
 export default function Header({authState}) {
 
-  const [acessos, setAcessos] = useState([])
-  const location = useLocation();
+  const [isLoading, setIsLoading] = useState(true)
+  const [registrarUsuario, setRegistrarUsuario] = useState(false)
+  const auth = useSelector((state) => state.auth );
+  const [, setAcessosHeader] = useState([])
 
-  useEffect(() => {
-
-    async function getAcessos(){
-      try {
-        const response = await axios.get(`/grupo/${authState.usuario.grupoId}/acessos`)
-
-        setAcessos(response.data.acessos)
-
-      } catch (error) {
-        const message = getErrorMessage(error)
-        console.log( 'getacesso',message)
+  useEffect(()=> {
+    async function fecthAcess(){
+      if(!auth.usuario.grupoId) {
+        return
       }
+      const res = await Acessos.getAcessos(auth.usuario.grupoId)
+      setAcessosHeader(res)
+      setRegistrarUsuario(!!res.find(acesso => acesso.path === "/usuario/listar" && acesso.hasAccess))
+
+      setIsLoading(false)
     }
-
-    if (location.pathname !== '/login') getAcessos()
-
-  }, [setAcessos, authState, location])
+    fecthAcess()
+  }, [isLoading, auth.usuario.grupoId])
 
   return (
+    !isLoading &&
     <Nav>
       <Link to="/">
         <FaHome />
       </Link>
 
       {
-      acessos.registrarUsuario &&
-        <Link to="/usuario/registrar">
+      registrarUsuario &&
+        <Link to="/usuario/listar">
           <FaUserAlt />
         </Link>
       }
@@ -57,7 +56,12 @@ export default function Header({authState}) {
             <FaSignInAlt />
           </Link>
       }
-
+      {
+        authState.isLoggedIn &&
+          <Link reloadDocument to={`/usuario/${authState.usuario.id}/editar`} state={ {usuarioEdit: authState.usuario, selfEdit: true} }>
+            <FaRegUserCircle />
+          </Link>
+      }
     </Nav>
   );
 }

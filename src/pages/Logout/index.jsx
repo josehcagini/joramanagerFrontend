@@ -10,7 +10,7 @@ export default function Logout() {
 
   useEffect(() => {
     dispatch(actions.logout())
-  }, [dispatch])
+  }, [])
 
   return (
     <div>
