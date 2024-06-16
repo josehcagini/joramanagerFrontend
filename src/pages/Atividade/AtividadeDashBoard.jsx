@@ -1,5 +1,7 @@
 import React from 'react';
 
+import PropTypes from 'prop-types';
+
 const AtividadeDashBoard = ({ activities, onEdit, onCreate }) => {
   const statuses = ["PENDENTE", "ANDAMENTO", "TESTANDO", "PRONTO"];
 
@@ -24,3 +26,10 @@ const AtividadeDashBoard = ({ activities, onEdit, onCreate }) => {
 };
 
 export default AtividadeDashBoard;
+
+
+AtividadeDashBoard.propTypes = {
+  activities: PropTypes.array,
+  onEdit: PropTypes.func,
+  onCreate: PropTypes.func
+}

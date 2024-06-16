@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { FaHome, FaSignInAlt, FaUserAlt, FaSignOutAlt, FaRegUserCircle } from 'react-icons/fa';
+import { FaHome, FaSignInAlt, FaUserAlt, FaSignOutAlt, FaRegUserCircle, FaTasks } from 'react-icons/fa';
 import { Nav } from './styled';
 
 import PropTypes from 'prop-types';
@@ -12,6 +12,7 @@ export default function Header({authState}) {
 
   const [isLoading, setIsLoading] = useState(true)
   const [registrarUsuario, setRegistrarUsuario] = useState(false)
+  const [registrarAtividade, setRegistrarAtividade] = useState(true)
   const auth = useSelector((state) => state.auth );
   const [, setAcessosHeader] = useState([])
 
@@ -40,6 +41,12 @@ export default function Header({authState}) {
       registrarUsuario &&
         <Link to="/usuario/listar">
           <FaUserAlt />
+        </Link>
+      }
+      {
+      registrarAtividade &&
+        <Link to="/atividade/listar">
+          <FaTasks />
         </Link>
       }
 

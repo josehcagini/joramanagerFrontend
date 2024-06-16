@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import PropTypes from 'prop-types';
+
 const AtividadeForm = ({ activity, onSave }) => {
   const [name, setName] = useState(activity?.name || '');
   const [status, setStatus] = useState(activity?.status || 'PENDENTE');
@@ -61,3 +63,8 @@ const AtividadeForm = ({ activity, onSave }) => {
 };
 
 export default AtividadeForm;
+
+AtividadeForm.propTypes = {
+  activity: PropTypes.object,
+  onSave: PropTypes.func,
+}

@@ -42,6 +42,7 @@ export default function MyRoute({ isClosed = false, ...rest }) {
 
   if(isClosed ){
     if(isLoading) return <SemAutorizacao />;
+    console.log(acessosHeader)
     const access = acessosHeader.find((e) => {
       if(e.isRegEx ? (new RegExp(e.path)).test(locationPath.pathname) : e.path === locationPath.pathname){
           return selfEdit  ? e.selfEdit : !e.selfEdit

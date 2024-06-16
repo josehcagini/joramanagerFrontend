@@ -8,6 +8,7 @@ import MyForm from '../../components/MyForm';
 
 
 import {Container} from './styled'
+import PesquisaGrupo from '../../components/PesquisaGrupo';
 
 export default function UsuarioCreate() {
 
@@ -60,6 +61,7 @@ export default function UsuarioCreate() {
 
   return (
     <Container>
+      <PesquisaGrupo />
       <h1 style={{margin: `8px`}}>Usuario</h1>
       {
         error &&
