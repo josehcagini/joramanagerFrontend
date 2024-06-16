@@ -15,19 +15,14 @@ export const Container = styled.div`
     visibility: hidden;
     transition: transform 0.4s, top 0.4s;
 
+    visibility: visible;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    z-index: 2;
+    border: 1px solid #000000;
+
 `;
 
 Container.defaultProps = {
-  open: {
-
-  }
-}
-
-
-.open{
-  visibility: visible;
-  top: 50%;
-  transform: translate(-50%, -50%) scale(1);
-  z-index: 2;
-  border: 1px solid #000000;
+  open: false
 }

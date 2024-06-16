@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 export default function PesquisaGrupo({labelName, type, name, id, placeholder, value, onChange, autoComplete='off', required = false}) {
 
   return (
-    <Container className={styles.open}>
+    <Container >
       teste
     </Container>
   );
