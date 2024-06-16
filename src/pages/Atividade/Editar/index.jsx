@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const AtividadeForm = ({ activity, onSave }) => {
+const AtividadeEdit = ({ activity, onSave }) => {
   const [name, setName] = useState(activity?.name || '');
   const [status, setStatus] = useState(activity?.status || 'PENDENTE');
   const [artifacts, setArtifacts] = useState(activity?.artifacts || []);
@@ -60,4 +60,4 @@ const AtividadeForm = ({ activity, onSave }) => {
   );
 };
 
-export default AtividadeForm;
+export default AtividadeEdit;
