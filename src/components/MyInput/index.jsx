@@ -1,12 +1,12 @@
 import React from 'react';
-import {Input, Label} from './styled';
+import {Input, Label, Container} from './styled';
 
 import PropTypes from 'prop-types';
 
 export default function MyInput({labelName, type, name, id, placeholder, value, onChange, autoComplete='off', required = false}) {
 
   return (
-    <div>
+    <Container>
       {
         labelName &&
         <Label
@@ -26,7 +26,7 @@ export default function MyInput({labelName, type, name, id, placeholder, value, 
         autoComplete={autoComplete}
         required={required}
       />
-    </div>
+    </Container>
   );
 }
 
