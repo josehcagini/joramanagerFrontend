@@ -8,110 +8,143 @@ import MyForm from '../../../components/MyForm';
 
 
 import {Container} from './styled'
-import PesquisaGrupo from '../../../components/PesquisaGrupo';
 
 export default function AtividadeCreate() {
-  // const navigate = useNavigate();
-  // const location = useLocation();
-  // const activity = location.state?.activity || null;
-
-  // const handleSave = (savedActivity) => {
-  //   // Save the activity (create or update)
-  //   // Here you would typically make an API call to save the activity
-  //   console.log('Saved activity:', savedActivity);
-  //   navigate('/');
-  // };
-
-  // return (
-  //   <div>
-  //     <h1>{activity ? 'Edit Activity' : 'Create Activity'}</h1>
-  //     <AtividadeForm activity={activity} onSave={handleSave} />
-  //   </div>
-  // );
   const [error, setError] = useState('');
-  const [nome, setNome] = useState('');
-  const [senha, setSenha] = useState('');
-  const [grupoId, setGrupo] = useState(0);
+  const [titulo, setTitulo] = useState('');
+  const [descricao, setDescricao] = useState('');
+  const [status, setStatus] = useState(0);
+  const [dtentrega, setDtentrega] = useState(new Date().toISOString().slice(0, 16));
+  const [usuario_id, setUsuarioId] = useState(1);
+  const [artefatos, setArtefatos] = useState([]);
+
+  const addArtefato = () => {
+    setArtefatos([...artefatos, { titulo: '', descricao: '', originalname: '', filename: '', url: '' }]);
+  };
+
+  const updateArtefato = (index, field, value) => {
+    const newArtefatos = [...artefatos];
+    newArtefatos[index][field] = value;
+    setArtefatos(newArtefatos);
+  };
+
+  const deleteArtefato = (index) => {
+    const newArtefatos = artefatos.filter((_, i) => i !== index);
+    setArtefatos(newArtefatos);
+  };
 
   const handleSubmit = useCallback( async (e) => {
 
     e.preventDefault();
     setError('');
 
-    function validarUsuario({nome, senha}){
-      console.log(nome, !nome || nome.length < 6)
-      if(!nome || nome.length < 6) {
-        throw new Error('nome precisa ter mais que 6 caracteres')
+    function validarAtividade({titulo, descricao, usuario_id}){
+      if(!titulo) {
+        throw new Error('Título não pode estar em branco')
       }
-      if(!senha || senha.length < 6) {
-        throw new Error('senha precisa ter mais que 6 caracteres')
+      if(!descricao) {
+        throw new Error('Descrição não pode estar em branco')
+      }
+      if(!usuario_id) {
+        throw new Error('É preciso informar um usuário')
       }
     }
 
     try {
-
-      const usuario = {
-        nome,
-        senha,
-        grupoId: Number(grupoId) === 0 ? null : Number(grupoId)
+      const atividade = {
+        titulo,
+        descricao,
+        status,
+        dtentrega,
+        usuario_id
       }
 
-      validarUsuario(usuario)
+      validarAtividade(atividade)
 
-      const response = await axios.post('/usuario', {usuario})
+      const response = await axios.post('/atividade', {atividade})
 
-      const novoUsuario = response.data.novoUsuario
+      const novaAtividade = response.data.novaAtividade
 
-      if (novoUsuario){
-        history.push('/', {novoUsuario})
+      if (novaAtividade){
+        history.push('/', {novaAtividade})
         history.go(0)
       }
 
     } catch (err) {
       let message;
       message = getErrorMessage(err)
-      setError( message || 'Falha ao criar usuario')
+      setError( message || 'Falha ao criar atividade')
     }
 
-  }, [nome, senha, grupoId])
+  }, [titulo, descricao, status, dtentrega, usuario_id])
 
   return (
     <Container>
-      <PesquisaGrupo />
-      <h1 style={{margin: `8px`}}>Usuario</h1>
+      <h1 style={{margin: `8px`}}>Atividade</h1>
       {
         error &&
         <p>{error}</p>
       }
       <MyForm onSubmit={handleSubmit}>
         <MyInput
-          labelName="Nome"
+          labelName="Título"
           type="text"
-          name="nome"
-          id="nome"
-          placeholder='Nome do usuario'
-          value={nome}
-          onChange={(e) => setNome(e.target.value)}
+          name="titulo"
+          id="titulo"
+          placeholder='Título da atividade'
+          value={titulo}
+          onChange={(e) => setTitulo(e.target.value)}
         />
+        <label>
+          Descrição
+          <textarea name="descricao" placeholder='Descrição da atividade' value={descricao} onChange={(e) => setDescricao(e.target.value)} />
+        </label>
+        <div>
+          <label>Status</label>
+          <select value={status} onChange={(e) => setStatus(e.target.value)}>
+            <option value="0">Pendente</option>
+            <option value="1">Andamento</option>
+            <option value="2">Testando</option>
+            <option value="3">Pronto</option>
+          </select>
+        </div>
         <MyInput
-          labelName="Senha"
-          type="password"
-          name="senha"
-          id="senha"
-          placeholder='Senha do usuario'
-          autoComplete='off'
-          value={senha}
-          onChange={(e) => setSenha(e.target.value)}
+          labelName="Data"
+          type="datetime-local"
+          name="dtentrega"
+          id="dtentrega"
+          value={dtentrega}
+          onChange={(e) => setDtentrega(e.target.value)}
         />
-        <MyInput
-          labelName="Grupo"
-          type="number"
-          name="grupo"
-          id="grupo"
-          placeholder='Grupo do usuario'
-          value={grupoId}
-          onChange={(e) => setGrupo(e.target.value)}
-        />
+        <div>
+          <label>Usuário</label>
+          <select value={usuario_id} onChange={(e) => setUsuarioId(e.target.value)}>
+            <option value="1">admin</option>
+            <option value="2">dev</option>
+            <option value="3">teste</option>
+          </select>
+        </div>
+        <div>
+          <h4>Artefatos</h4>
+          {artefatos.map((artefato, index) => (
+            <div key={index}>
+              <input
+                type="text"
+                placeholder="Título"
+                value={artefato.titulo}
+                onChange={(e) => updateArtefato(index, 'titulo', e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Descrição"
+                value={artefato.descricao}
+                onChange={(e) => updateArtefato(index, 'descricao', e.target.value)}
+              />
+              <button type="button" onClick={() => deleteArtefato(index)}>Excluir</button>
+            </div>
+          ))}
+          <button type="button" onClick={addArtefato}>Adicionar</button>
+        </div>
         <button type="submit">Salvar</button>
       </MyForm>
 
