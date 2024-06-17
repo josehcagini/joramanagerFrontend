@@ -9,13 +9,13 @@ import { Link } from "react-router-dom"
 import MyButton from "../../../components/MyButton"
 import history from "../../../services/history"
 
-const AtividadeList = () => {
+export default function AtividadeList() {
   const [atividades, SetAtividades] = useState([])
 
   useEffect(() => {
     async function getAtividades(){
       const response = await axios.get('/atividade')
-
+      console.log(response.data)
       const atividadesRes = response.data.atividades
 
       SetAtividades(atividadesRes)
@@ -84,6 +84,4 @@ const AtividadeList = () => {
     }
     </Container>
   )
-};
-
-export default AtividadeList;
+}

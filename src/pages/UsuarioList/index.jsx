@@ -16,7 +16,7 @@ export default function UsuarioList(){
   useEffect(() => {
     async function getUsuarios(){
       const response = await axios.get('/usuario')
-
+      console.log(response.data)
       const usuariosRes = response.data.usuarios
 
       SetUsuarios(usuariosRes)
