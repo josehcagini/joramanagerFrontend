@@ -43,6 +43,7 @@ export default function Header({authState}) {
           <FaUserAlt />
         </Link>
       }
+      
       {
       registrarAtividade &&
         <Link to="/atividade/listar">

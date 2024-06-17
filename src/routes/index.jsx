@@ -10,9 +10,9 @@ import Logout from '../pages/Logout';
 import UsuarioCreate from '../pages/UsuarioCreate';
 import UsuarioList from '../pages/UsuarioList';
 import UsuarioEdit from '../pages/UsuarioEdit';
-import AtividadeCreate from '../pages/UsuarioCreate';
-import AtividadeList from '../pages/UsuarioList';
-import AtividadeEdit from '../pages/UsuarioEdit';
+import AtividadeCreate from '../pages/Atividade/Registrar';
+import AtividadeList from '../pages/Atividade/Listar';
+import AtividadeEdit from '../pages/Atividade/Editar';
 
 export default function Routers() {
   return (
@@ -35,10 +35,10 @@ export default function Routers() {
         <Route path='/usuario/:usuarioId/editar' element={<UsuarioEdit />} />
       </Route>
 
-      <Route path='/usuario' element={<MyRoute isClosed={true} />}>
-        <Route path='/usuario/registrar' element={<AtividadeCreate />} />
-        <Route path='/usuario/listar' element={<AtividadeList />} />
-        <Route path='/usuario/:usuarioId/editar' element={<AtividadeEdit />} />
+      <Route path='/atividade' element={<MyRoute isClosed={true} />}>
+        <Route path='/atividade/registrar' element={<AtividadeCreate />} />
+        <Route path='/atividade/listar' element={<AtividadeList />} />
+        <Route path='/atividade/:usuarioId/editar' element={<AtividadeEdit />} />
       </Route>
 
       <Route path="*" element={<MyRoute />}>
