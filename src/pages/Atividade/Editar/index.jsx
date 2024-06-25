@@ -12,169 +12,139 @@ import MyButton from '../../../components/MyButton';
 import { useLocation, useParams } from 'react-router-dom';
 
 export default function AtividadeEdit() {
-  // const [name, setName] = useState(activity?.name || '');
-  // const [status, setStatus] = useState(activity?.status || 'PENDENTE');
-  // const [artifacts, setArtifacts] = useState(activity?.artifacts || []);
-
-  // const addArtifact = () => {
-  //   setArtifacts([...artifacts, { id: '', description: '' }]);
-  // };
-
-  // const updateArtifact = (index, field, value) => {
-  //   const newArtifacts = [...artifacts];
-  //   newArtifacts[index][field] = value;
-  //   setArtifacts(newArtifacts);
-  // };
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   onSave({ ...activity, name, status, artifacts });
-  // };
-
-  // return (
-  //   <form onSubmit={handleSubmit}>
-  //     <div>
-  //       <label>Activity Name:</label>
-  //       <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-  //     </div>
-  //     <div>
-  //       <label>Status:</label>
-  //       <select value={status} onChange={(e) => setStatus(e.target.value)}>
-  //         <option value="PENDENTE">PENDENTE</option>
-  //         <option value="ANDAMENTO">ANDAMENTO</option>
-  //         <option value="TESTANDO">TESTANDO</option>
-  //         <option value="PRONTO">PRONTO</option>
-  //       </select>
-  //     </div>
-  //     <div>
-  //       <h4>Artifacts</h4>
-  //       {artifacts.map((artifact, index) => (
-  //         <div key={index}>
-  //           <input
-  //             type="text"
-  //             placeholder="ID"
-  //             value={artifact.id}
-  //             onChange={(e) => updateArtifact(index, 'id', e.target.value)}
-  //           />
-  //           <input
-  //             type="text"
-  //             placeholder="Description"
-  //             value={artifact.description}
-  //             onChange={(e) => updateArtifact(index, 'description', e.target.value)}
-  //           />
-  //         </div>
-  //       ))}
-  //       <button type="button" onClick={addArtifact}>Add Artifact</button>
-  //     </div>
-  //     <button type="submit">Save</button>
-  //   </form>
-  // );
-
   const localtionPath = useLocation()
   const state = localtionPath?.state  || {}
   const params = useParams()
-  const usuarioIdParams = params.usuarioId
+  const atividadeIdParams = params.atividadeId
 
-  const [usuarioEdit, setUsuarioEdit] = useState( {...(state?.usuarioEdit || {}), senha: ''} )
+  const [atividadeEdit, setAtividadeEdit] = useState( {...(state?.atividadeEdit || {})} )
 
-  const [usuario, setUsuario] = useState({ ...(!usuarioEdit?.id ? {nome: '', grupoId: 0} : {usuarioEdit}) , senha: ''})
+  const [atividade, setAtividade] = useState({ ...(!atividadeEdit?.id ? {titulo: '', descricao: '', status: 0, dtentrega: new Date().toISOString().slice(0, 16), usuario_id:1} : {atividadeEdit})})
   const [error, setError] = useState('');
   const [errorFetch, setErrorFetch] = useState('');
 
-  const setSenha = useCallback( (novaSenha) => {
+  const [artefatos, setArtefatos] = useState([]);
 
-    const usuarioUsuario = {...usuario}
+  const addArtefato = () => {
+    setArtefatos([...artefatos, { titulo: '', descricao: '', originalname: '', filename: '', url: '' }]);
+  };
 
-    usuarioUsuario.senha = novaSenha
+  const updateArtefato = (index, field, value) => {
+    const newArtefatos = [...artefatos];
+    newArtefatos[index][field] = value;
+    setArtefatos(newArtefatos);
+  };
 
-    setUsuario(usuarioUsuario)
-  }
+  const deleteArtefato = (index) => {
+    const newArtefatos = artefatos.filter((_, i) => i !== index);
+    setArtefatos(newArtefatos);
+  };
 
-  , [setUsuario, usuario])
+  const setTitulo = useCallback( (novaTitulo) => {
+    const atividadeAtividade = {...atividade}
 
-  const setNome = useCallback( (novoNome) => {
+    atividadeAtividade.titulo = novaTitulo
 
-    const usuarioUsuario = {...usuario}
+    setAtividade(atividadeAtividade)
+  }, [setAtividade, atividade])
 
-    usuarioUsuario.nome = novoNome
+  const setDescricao = useCallback( (novoDescricao) => {
+    const atividadeAtividade = {...atividade}
 
-    setUsuario(usuarioUsuario)
-  }
+    atividadeAtividade.descricao = novoDescricao
 
-  , [setUsuario, usuario])
+    setAtividade(atividadeAtividade)
+  }, [setAtividade, atividade])
 
-  const setGrupo = useCallback( (novoGrupo) => {
+  const setStatus = useCallback( (novoStatus) => {
+    const atividadeAtividade = {...atividade}
 
-    const usuarioUsuario = {...usuario}
+    atividadeAtividade.status = novoStatus
 
-    usuarioUsuario.grupoId = novoGrupo
+    setAtividade(atividadeAtividade)
+  }, [setAtividade, atividade])
 
-    setUsuario(usuarioUsuario)
-  }
+  const setDtentrega = useCallback( (novoDtEntrega) => {
+    const atividadeAtividade = {...atividade}
 
-  , [setUsuario, usuario])
+    atividadeAtividade.dtentrega = novoDtEntrega
+
+    setAtividade(atividadeAtividade)
+  }, [setAtividade, atividade])
+
+  const setUsuarioId = useCallback( (novoUsuarioId) => {
+    const atividadeAtividade = {...atividade}
+
+    atividadeAtividade.usuario_id = novoUsuarioId
+
+    setAtividade(atividadeAtividade)
+  }, [setAtividade, atividade])
 
   const handleSubmit = useCallback( async (e) => {
 
     e.preventDefault();
     setError('');
 
-    function validarUsuario({nome, senha}){
-      if(!nome || nome.length < 6) {
-        throw new Error('nome precisa ter mais que 6 caracteres')
+    function validarAtividade({titulo, descricao, usuario_id}){
+      if(!titulo) {
+        throw new Error('Título não pode estar em branco')
       }
-      if(senha && senha.length < 6) {
-        throw new Error('senha precisa ter mais que 6 caracteres')
+      if(!descricao) {
+        throw new Error('Descrição não pode estar em branco')
+      }
+      if(!usuario_id) {
+        throw new Error('É preciso informar um usuário')
       }
     }
 
     try {
-
-      const usuarioEditado = {
-        nome: usuario.nome,
-        senha: usuario.senha,
-        grupoId: Number(usuario.grupoId) === 0 ? null : Number(usuario.grupoId)
+      const atividadeEditado = {
+        titulo: atividade.titulo,
+        descricao: atividade.descricao,
+        status: atividade.status,
+        dtentrega: atividade.dtentrega,
+        usuario_id: atividade.usuario_id
       }
 
-      validarUsuario(usuario)
+      validarAtividade(atividade)
 
-      const response = await axios.put(`/usuario/${usuario.id}`, {...usuarioEditado})
+      const response = await axios.put(`/atividade/${atividade.id}`, {...atividadeEditado})
 
-      const novoUsuario = response.data.usuario
+      const novoAtividade = response.data.atividade
 
-      if (novoUsuario){
-        history.push('/', {novoUsuario})
+      if (novoAtividade){
+        history.push('/', {novoAtividade})
         history.go(0)
       }
 
     } catch (err) {
       let message;
       message = getErrorMessage(err)
-      setError( message || 'Falha ao criar usuario')
+      setError( message || 'Falha ao criar atividade')
     }
 
-  }, [usuario])
+  }, [atividade])
 
   useEffect(()=>{
-    async function fetchUsuario(){
+    async function fetchAtividade(){
       try {
-        const res = await axios.get(`/usuario/${usuarioIdParams}`)
-        if(!res.data.usuario?.id){
-          throw new Error('usuario nao encontrado')
+        const res = await axios.get(`/atividade/${atividadeIdParams}`)
+        if(!res.data.atividade?.id){
+          throw new Error('atividade nao encontrado')
         }
-        const usuarioFetch = {...res.data.usuario, senha: ''}
-        setUsuarioEdit(usuarioFetch)
-        setUsuario(usuarioFetch)
+        const atividadeFetch = {...res.data.atividade}
+        setAtividadeEdit(atividadeFetch)
+        setAtividade(atividadeFetch)
       } catch (error) {
-        console.log('fetchUsuario')
+        console.log('fetchAtividade')
         console.log(error)
         const message = getErrorMessage(error)
         setErrorFetch(message)
       }
 
     }
-    if(!state?.usuarioEdit){
-      fetchUsuario()
+    if(!state?.atividadeEdit){
+      fetchAtividade()
     }
   }, [errorFetch, error])
 
@@ -185,37 +155,69 @@ export default function AtividadeEdit() {
       {
         !errorFetch &&
         <div>
-          <h1 style={{margin: `8px`}}>{usuarioEdit.nome}</h1>
+          <h1 style={{margin: `8px`}}>Atividade</h1>
           <MyForm onSubmit={handleSubmit}>
             <MyInput
-              labelName="Nome"
+              labelName="Título"
               type="text"
-              name="nome"
-              id="nome"
-              placeholder='Nome do usuario'
-              value={usuario.nome}
-              onChange={(e) => setNome(e.target.value)}
+              name="titulo"
+              id="titulo"
+              placeholder='Título da atividade'
+              value={atividade.titulo}
+              onChange={(e) => setTitulo(e.target.value)}
             />
+            <label style={{display:'flex',alignItems:'center'}}>
+              Descrição
+              <textarea rows={6} name="descricao" placeholder='Descrição da atividade' value={atividade.descricao} onChange={(e) => setDescricao(e.target.value)} />
+            </label>
+            <div style={{paddingTop:5}}>
+              <label style={{paddingRight:5}}>Status</label>
+              <select value={atividade.status} onChange={(e) => setStatus(e.target.value)}>
+                <option value="0">Pendente</option>
+                <option value="1">Andamento</option>
+                <option value="2">Testando</option>
+                <option value="3">Pronto</option>
+              </select>
+            </div>
             <MyInput
-              labelName="Nova Senha"
-              type="password"
-              name="senha"
-              id="senha"
-              placeholder='Senha do usuario'
-              autoComplete='off'
-              value={usuario.senha}
-              onChange={(e) => setSenha(e.target.value)}
+              labelName="Data"
+              type="datetime-local"
+              name="dtentrega"
+              id="dtentrega"
+              value={atividade.dtentrega}
+              onChange={(e) => setDtentrega(e.target.value)}
             />
-            <MyInput
-              labelName="Grupo"
-              type="number"
-              name="grupo"
-              id="grupo"
-              placeholder='Grupo do usuario'
-              value={usuario.grupoId}
-              onChange={(e) => setGrupo(e.target.value)}
-            />
-            <MyButton type="submit">Salvar</MyButton>
+            <div>
+              <label style={{paddingRight:5}}>Usuário</label>
+              <select value={atividade.usuario_id} onChange={(e) => setUsuarioId(e.target.value)}>
+                <option value="1">admin</option>
+                <option value="2">dev</option>
+                <option value="3">teste</option>
+              </select>
+            </div>
+            <Container>
+              <h2 style={{margin: `8px`}}>Artefatos</h2>
+              {artefatos.map((artefato, index) => (
+                <div key={index} style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center'}}>
+                  <input
+                    type="text"
+                    placeholder="Título"
+                    value={artefato.titulo}
+                    onChange={(e) => updateArtefato(index, 'titulo', e.target.value)}
+                  />
+                  <input
+                    style={{margin:0}}
+                    type="text"
+                    placeholder="Descrição"
+                    value={artefato.descricao}
+                    onChange={(e) => updateArtefato(index, 'descricao', e.target.value)}
+                  />
+                  <button style={{margin:5}} type="button" onClick={() => deleteArtefato(index)}>Excluir</button>
+                </div>
+              ))}
+              <button style={{margin:5}} type="button" onClick={addArtefato}>Adicionar</button>
+            </Container>
+            <button type="submit">Salvar</button>
           </MyForm>
         </div>
       }

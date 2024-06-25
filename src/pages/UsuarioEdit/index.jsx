@@ -109,7 +109,6 @@ export default function UsuarioEdit() {
         setUsuarioEdit(usuarioFetch)
         setUsuario(usuarioFetch)
       } catch (error) {
-        console.log('fetchUsuario')
         console.log(error)
         const message = getErrorMessage(error)
         setErrorFetch(message)

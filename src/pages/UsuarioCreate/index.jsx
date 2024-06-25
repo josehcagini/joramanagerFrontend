@@ -7,7 +7,7 @@ import MyInput from '../../components/MyInput';
 import MyForm from '../../components/MyForm';
 
 
-import {Container, FundoPreto} from './styled.js'
+import {Container, FundoPreto} from './styled.js';
 import PesquisaGrupo from '../../components/PesquisaGrupo';
 import MyInputPesquisa from '../../components/MyInputPesquisa';
 import MyButton from '../../components/MyButton';
