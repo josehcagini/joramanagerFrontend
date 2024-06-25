@@ -3,6 +3,7 @@ import getErrorMessage from '../../../utils/getErrorMessage';
 import axios from '../../../services/axios';
 import history from '../../../services/history';
 
+
 import MyInput from '../../../components/MyInput';
 import MyForm from '../../../components/MyForm';
 
@@ -95,12 +96,12 @@ export default function AtividadeCreate() {
           value={titulo}
           onChange={(e) => setTitulo(e.target.value)}
         />
-        <label>
+        <label style={{display:'flex',alignItems:'center'}}>
           Descrição
-          <textarea name="descricao" placeholder='Descrição da atividade' value={descricao} onChange={(e) => setDescricao(e.target.value)} />
+          <textarea rows={6} name="descricao" placeholder='Descrição da atividade' value={descricao} onChange={(e) => setDescricao(e.target.value)} />
         </label>
-        <div>
-          <label>Status</label>
+        <div style={{paddingTop:5}}>
+          <label style={{paddingRight:5}}>Status</label>
           <select value={status} onChange={(e) => setStatus(e.target.value)}>
             <option value="0">Pendente</option>
             <option value="1">Andamento</option>
@@ -117,17 +118,17 @@ export default function AtividadeCreate() {
           onChange={(e) => setDtentrega(e.target.value)}
         />
         <div>
-          <label>Usuário</label>
+          <label style={{paddingRight:5}}>Usuário</label>
           <select value={usuario_id} onChange={(e) => setUsuarioId(e.target.value)}>
             <option value="1">admin</option>
             <option value="2">dev</option>
             <option value="3">teste</option>
           </select>
         </div>
-        <div>
-          <h4>Artefatos</h4>
+        <Container>
+          <h2 style={{margin: `8px`}}>Artefatos</h2>
           {artefatos.map((artefato, index) => (
-            <div key={index}>
+            <div key={index} style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center'}}>
               <input
                 type="text"
                 placeholder="Título"
@@ -135,16 +136,17 @@ export default function AtividadeCreate() {
                 onChange={(e) => updateArtefato(index, 'titulo', e.target.value)}
               />
               <input
+                style={{margin:0}}
                 type="text"
                 placeholder="Descrição"
                 value={artefato.descricao}
                 onChange={(e) => updateArtefato(index, 'descricao', e.target.value)}
               />
-              <button type="button" onClick={() => deleteArtefato(index)}>Excluir</button>
+              <button style={{margin:5}} type="button" onClick={() => deleteArtefato(index)}>Excluir</button>
             </div>
           ))}
-          <button type="button" onClick={addArtefato}>Adicionar</button>
-        </div>
+          <button style={{margin:5}} type="button" onClick={addArtefato}>Adicionar</button>
+        </Container>
         <button type="submit">Salvar</button>
       </MyForm>
 
